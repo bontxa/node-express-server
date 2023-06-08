@@ -4,11 +4,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    #image: server
     ports:
       - 8000:8000
     depends_on:
       - db
+    volumes:
+      - ./images:/express_js/images
   
   db:
     image: postgres:15.3-alpine

@@ -54,7 +54,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
     if (!req.file) {
         res.status(500).send('Upload fallito.')
     } else {
-        res.status(200).send('Immagine caricata con successo')
+        res.status(200).sendFile(__dirname + '/html/success.html')
     }
 })
 
