@@ -1,5 +1,17 @@
 var express = require ('express')
 var app = express()
+const multer = require ('multer')
+
+
+const storage = multer.diskStorage({
+    destination: 'images',
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
+    },
+  })
+
+
+const upload = multer ({ storage })
 
 require ('dotenv').config()
 
@@ -15,6 +27,7 @@ const pool = new Pool({
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static('html'))
 app.use(express.static('css'))
+app.use(express.static('images'))
 
 app.post('/submit-form', (req, res) => { 
     const { nome, cognome, email } = req.body
@@ -38,6 +51,15 @@ app.post('/submit-query', (req, res) => {
         res.status(200).send(JSON.stringify(tmp, null, 2))
     })
 })
+app.post('/upload-image', upload.single('image'), (req, res) => {
+    // Il file viene caricato nella directory specificata
+    // Puoi accedere alle informazioni del file tramite req.file
+    // Esempio: req.file.filename, req.file.path, ecc.
+  
+    // Puoi eseguire ulteriori operazioni sul file qui, ad esempio salvare il percorso del file nel database
+  
+    res.status(200).send('Immagine caricata con successo')
+  });
 
 
 var server = app.listen(8000, function() { console.log('Listening on port 8000') })

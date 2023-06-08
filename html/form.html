@@ -20,6 +20,11 @@
 
 		<input type="submit" value="Invia">
 	</form>
+	<h1>Carica un'immagine</h1>
+	<form action="/upload-image" method="POST" enctype="multipart/form-data">
+		<input type="file" name="image" accept="image/*" required>
+		<button type="submit">Carica immagine</button>
+	</form>
 
 </body>
 </html>
