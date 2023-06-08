@@ -5,8 +5,8 @@ const multer = require ('multer')
 const storage = multer.diskStorage({
     destination: 'images',
     filename: (req, file, cb) => {
-      cb(null, file.originalname);
-    },
+        cb(null, file.originalname)
+    }
   })
 const upload = multer ({ storage })
 
@@ -34,8 +34,9 @@ app.post('/submit-form', (req, res) => {
     pool.query(query, values, (error, result) => {
         if (error) {
             res.status(500).send('query fallita con il seguente errore:\n' + error.message)
+        } else {
+            res.status(200).sendFile(__dirname + '/html/success.html')
         }
-        res.status(200).sendFile(__dirname + '/html/success.html')
     })
 })
 app.post('/submit-query', (req, res) => {
@@ -43,16 +44,18 @@ app.post('/submit-query', (req, res) => {
     pool.query(query, (error, result) => {
         if (error) {
             res.status(500).send('query fallita con il seguente errore:\n' + error.message)
+        } else {
+            const tmp = result.rows
+            res.status(200).send(JSON.stringify(tmp, null, 2))
         }
-        const tmp = result.rows
-        res.status(200).send(JSON.stringify(tmp, null, 2))
     })
 })
 app.post('/upload-image', upload.single('image'), (req, res) => {
     if (!req.file) {
-        return res.status(500).send('Upload fallito.')
+        res.status(500).send('Upload fallito.')
+    } else {
+        res.status(200).send('Immagine caricata con successo')
     }
-    res.status(200).send('Immagine caricata con successo')
 })
 
 
