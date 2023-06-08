@@ -1,16 +1,13 @@
 var express = require ('express')
 var app = express()
+
 const multer = require ('multer')
-
-
 const storage = multer.diskStorage({
     destination: 'images',
     filename: (req, file, cb) => {
       cb(null, file.originalname);
     },
   })
-
-
 const upload = multer ({ storage })
 
 require ('dotenv').config()
@@ -52,14 +49,11 @@ app.post('/submit-query', (req, res) => {
     })
 })
 app.post('/upload-image', upload.single('image'), (req, res) => {
-    // Il file viene caricato nella directory specificata
-    // Puoi accedere alle informazioni del file tramite req.file
-    // Esempio: req.file.filename, req.file.path, ecc.
-  
-    // Puoi eseguire ulteriori operazioni sul file qui, ad esempio salvare il percorso del file nel database
-  
+    if (!req.file) {
+        return res.status(500).send('Upload fallito.')
+    }
     res.status(200).send('Immagine caricata con successo')
-  });
+})
 
 
 var server = app.listen(8000, function() { console.log('Listening on port 8000') })
